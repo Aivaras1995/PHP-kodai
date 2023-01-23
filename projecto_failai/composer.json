@@ -1,0 +1,21 @@
+{
+    "name": "aivarasjur/portfolio",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Aivaras Jurgutis"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "2.8.0",
+        "php": ">=8.0",
+        "larapack/dd": "^1.1"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Projektasx\\": "src\\"}
+
+
+    }
+}
