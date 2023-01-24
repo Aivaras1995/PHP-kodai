@@ -26,14 +26,4 @@ services:
       MYSQL_USER: devuser
       MYSQL_PASSWORD: devpass
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
-    depends_on:
-      - db
-    ports:
-      - 81:80
-    environment:
-      PMA_HOST: db
-      PMA_USER: devuser
-      PMA_PASSWORD: devpass
-      UPLOAD_LIMIT: 2048
+
