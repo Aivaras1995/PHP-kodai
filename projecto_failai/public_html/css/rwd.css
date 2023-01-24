@@ -1,0 +1,20 @@
+@media only screen and (max-width: 600px) {
+    .wraper {
+        background-color: yellow;
+        width: 300px;
+        grid-template-areas:
+        'h'
+        't'
+        'f';
+    }
+    .wraper  > aside {
+        display: none;
+    }
+    body > header {
+        grid-template-areas:
+            'n';
+    }
+    header .slogan, header .logo {
+        display: none;
+    }
+}
