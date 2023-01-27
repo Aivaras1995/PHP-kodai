@@ -1,6 +1,6 @@
 <?php
 
-namespace Projektasx\Exceptions;
+namespace Appsas\Exceptions;
 
 use Exception;
 

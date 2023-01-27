@@ -1,6 +1,6 @@
 <?php
 
-namespace Projektasx;
+namespace Appsas;
 
 use PDO;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Projektasx;
+namespace Appsas;
 
-use Projektasx\Exceptions\ValidatorException;
+use Appsas\Exceptions\ValidatorException;
 
 class Validator
 {

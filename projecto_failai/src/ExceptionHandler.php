@@ -1,10 +1,10 @@
 <?php
 
-namespace Projektasx;
+namespace Appsas;
 
-use Projektasx\Exceptions\MissingVariableException;
-use Projektasx\Exceptions\PageNotFoundException;
-use Projektasx\Exceptions\UnauthenticatedException;
+use Appsas\Exceptions\MissingVariableException;
+use Appsas\Exceptions\PageNotFoundException;
+use Appsas\Exceptions\UnauthenticatedException;
 use Exception;
 use JetBrains\PhpStorm\NoReturn;
 use Monolog\Logger;

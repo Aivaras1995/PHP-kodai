@@ -1,13 +1,13 @@
 <?php
 
-namespace Projektasx\Exceptions;
+namespace Appsas\Exceptions;
 
 use Exception;
 
 class UnauthenticatedException extends Exception
 {
-    public function __construct()
+    public function __construct($message = "Neteisingi prisijungimo duomenys", $code = 401)
     {
-        parent::__construct('Neteisingi prisijungimo duomenys', 401);
+        parent::__construct($message, $code);
     }
 }

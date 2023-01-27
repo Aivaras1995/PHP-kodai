@@ -1,20 +1,19 @@
 <?php
 
-namespace Projektasx\Controllers;
+namespace Appsas\Controllers;
 
-use Projektasx\Authenticator;
-use Projektasx\Exceptions\UnauthenticatedException;
-use Projektasx\Request;
-use Projektasx\Response;
+use Appsas\Authenticator;
+use Appsas\Exceptions\UnauthenticatedException;
+use Appsas\HtmlRender;
+use Appsas\Request;
+use Appsas\Response;
+use JetBrains\PhpStorm\NoReturn;
 
 class AdminController extends BaseController
 {
-    private Authenticator $authenticator;
-    // BAD PRACTICE: DI metu priskirti numatytasias (Default) reiksmes
-    public function __construct(Authenticator $authenticator = null)
+    public function __construct(protected Authenticator $authenticator, HtmlRender $htmlRender, Response $response)
     {
-        $this->authenticator = $authenticator ?? new Authenticator();
-        parent::__construct();
+        parent::__construct($htmlRender, $response);
     }
 
     /**
@@ -26,7 +25,7 @@ class AdminController extends BaseController
             throw new UnauthenticatedException();
         }
 
-        return $this->response('Admin puslapis! ' . $_SESSION['username']);
+        return $this->render('admin/dashboard', ['username' => $_SESSION['username']]);
     }
 
     /**
@@ -45,9 +44,8 @@ class AdminController extends BaseController
         return $this->redirect('/admin', ['message' => 'Sveikiname prisijungus']);
     }
 
-    public function logout(): Response
+    #[NoReturn] public function logout(): Response
     {
         $this->authenticator->logout();
-        return $this->redirect('/', ['message' => 'Sveikiname atsijungus']);
     }
 }

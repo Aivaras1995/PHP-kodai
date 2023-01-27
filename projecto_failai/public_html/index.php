@@ -1,13 +1,14 @@
 <?php
 
-use Projektasx\Authenticator;
-use Projektasx\Controllers\AdminController;
-use Projektasx\Controllers\KontaktaiController;
-use Projektasx\Controllers\PersonController;
-use Projektasx\Controllers\PradziaController;
-use Projektasx\ExceptionHandler;
-use Projektasx\Output;
-use Projektasx\Router;
+use Appsas\Authenticator;
+use Appsas\Controllers\AddressController;
+use Appsas\Controllers\AdminController;
+use Appsas\Controllers\KontaktaiController;
+use Appsas\Controllers\PersonController;
+use Appsas\Controllers\PradziaController;
+use Appsas\ExceptionHandler;
+use Appsas\Output;
+use Appsas\Router;
 use DI\ContainerBuilder;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -29,6 +30,7 @@ try {
     $adminController = $container->get(AdminController::class);
     $kontaktaiController = $container->get(KontaktaiController::class);
     $personController = $container->get(PersonController::class);
+    $addressController = $container->get(AddressController::class);
 
     $router = $container->get(Router::class);
     $router->addRoute('GET', '', [$container->get(PradziaController::class), 'index']);
@@ -43,6 +45,13 @@ try {
     $router->addRoute('GET', 'person/show', [$personController, 'show']);
     $router->addRoute('POST', 'person', [$personController, 'store']);
     $router->addRoute('POST', 'person/update', [$personController, 'update']);
+    $router->addRoute('GET', 'address', [$addressController, 'list']);
+    $router->addRoute('GET', 'address/new', [$addressController, 'new']);
+    $router->addRoute('GET', 'address/delete', [$addressController, 'delete']);
+    $router->addRoute('GET', 'address/edit', [$addressController, 'edit']);
+    $router->addRoute('GET', 'address/show', [$addressController, 'show']);
+    $router->addRoute('POST', 'address', [$addressController, 'store']);
+    $router->addRoute('POST', 'address/update', [$addressController, 'update']);
     $router->run();
 }
 catch (Exception $e) {
