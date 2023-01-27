@@ -4,36 +4,41 @@ namespace Projektasx\Controllers;
 
 use Projektasx\Database;
 use Projektasx\FS;
+use Projektasx\HtmlRender;
 use Projektasx\Request;
 use Projektasx\Response;
 use Projektasx\Validator;
 use Projektasx\Configs;
+use Projektasx\Managers\PersonsManager;
 
 class PersonController extends BaseController
 {
     public const TITLE = 'Asmenys';
+    public function __construct(protected PersonsManager $manager)
+    {
+     parent::__construct();
+    }
 
     public function list(): Response
     {
-        $config = new Configs();
-        $db = new Database($config);
+// TODO: Perkelti Filtravima
+//
+//        $kiekis = $request->get('amount', 10);
+//        $orderBy = $request->get('orderby', 'id');
+//
+//        $searchQuery = '';
+//        $params = [];
+//        $search = $request->get('search');
+//        if ($search) {
+//            $searchQuery = "WHERE first_name LIKE :search OR last_name LIKE :search OR code LIKE :search";
+//            $params['search'] = '%' . $search . '%';
+//        }
 
-        $kiekis = $_GET['amount'] ?? 10;
-        $orderBy = $_GET['orderby'] ?? 'id';
-
-        $asmenys = $db->query('SELECT p.*, concat(c.title, \' - \', a.city, \' - \', a.street, \' - \', a.postcode) address
-FROM persons p
-    LEFT JOIN addresses a on p.address_id = a.id 
-    LEFT JOIN countries c on a.country_iso = c.iso 
-ORDER BY ' . $orderBy . ' DESC LIMIT ' . $kiekis);
+        $asmenys = $this->manager->getAll();
 
         $rez = $this->generatePersonsTable($asmenys);
 
-        $failoSistema = new FS('../src/html/person/list.html');
-        $failoTurinys = $failoSistema->getFailoTurinys();
-        $failoTurinys = str_replace("{{body}}", $rez, $failoTurinys);
-
-        return $this->response($failoTurinys);
+        return $this->response($rez);
     }
 
     public function new(): Response
@@ -81,29 +86,14 @@ ORDER BY ' . $orderBy . ' DESC LIMIT ' . $kiekis);
         Validator::numeric($kuris);
         Validator::min($kuris, 1);
 
-        $conf = new Configs();
-        $db = new Database($conf);
-
-        $db->query("DELETE FROM `persons` WHERE `id` = :id", ['id' => $kuris]);
-
         return $this->redirect('/persons', ['message' => "Record deleted successfully"]);
     }
 
-    public function edit(): Response
+    public function edit(Request $request): Response
     {
-        $failoSistema = new FS('../src/html/person/edit.html');
-        $failoTurinys = $failoSistema->getFailoTurinys();
+        $person = $this->manager->getOne((int)$request->get('id'));
 
-        $conf = new Configs();
-        $db = new Database($conf);
-
-        $person = $db->query("SELECT * FROM `persons` WHERE `id` = :id", ['id' => $_GET['id']])[0];
-
-        foreach ($person as $key => $item) {
-            $failoTurinys = str_replace("{{" . $key . "}}", $item, $failoTurinys);
-        }
-
-        return $this->response($failoTurinys);
+        return $this->render('person/edit', $person);
     }
 
     public function update(Request $request): Response
@@ -152,7 +142,7 @@ ORDER BY ' . $orderBy . ' DESC LIMIT ' . $kiekis);
         $failoSistema = new FS('../src/html/person/person_row.html');
         $failoTurinys = $failoSistema->getFailoTurinys();
         foreach ($asmuo as $key => $item) {
-            $failoTurinys = str_replace("{{" . $key . "}}", $item, $failoTurinys);
+            $failoTurinys = str_replace("{{" . $key . "}}", $item??'', $failoTurinys);
         }
 
         return $failoTurinys;

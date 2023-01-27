@@ -1,0 +1,43 @@
+<?php
+
+namespace Projektasx\Managers;
+
+use Projektasx\Database;
+use Projektasx\Response;
+
+class PersonsManager
+{
+    public function __construct(protected Database $db)
+    {
+    }
+
+    public function getAll(): array
+    {
+        return $this->db->query('SELECT p.*, concat(c.title, \' - \', a.city, \' - \', a.street, \' - \', a.postcode) address
+                    FROM persons p
+                        LEFT JOIN addresses a on p.address_id = a.id 
+                        LEFT JOIN countries c on a.country_iso = c.iso');
+
+// TODO: Velesniam Filtravimui
+//
+//                        ' . $searchQuery . '
+//                        ORDER BY ' . $orderBy . ' DESC LIMIT ' . $kiekis,
+//            $params);
+    }
+
+    public function getOne(int $id): array
+    {
+        return $this->db->query('SELECT p.*, concat(c.title, \' - \', a.city, \' - \', a.street, \' - \', a.postcode) address
+                    FROM persons p
+                        LEFT JOIN addresses a on p.address_id = a.id 
+                        LEFT JOIN countries c on a.country_iso = c.iso
+                    WHERE p.id = :id',
+            ['id' => $id])[0];
+    }
+    public function delete(int $id): array
+    {
+        $kuris = (int)$_GET['id'] ?? null;
+        return $this->db->query("DELETE FROM `persons` WHERE `id` = :id", ['id' => $kuris]);
+
+    }
+}

@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   web:
-    image: tautiz/kcs_web
+    image: tautiz/web4study
     volumes:
       - ./projecto_failai:/var/www/html/
     ports:
